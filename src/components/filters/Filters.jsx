@@ -12,15 +12,15 @@ export function Filters({
   onReset,
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+    <div className="bg-white/20 backdrop-blur-sm shadow-xl rounded-xl p-6 mb-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-          <Filter className="mr-2" size={20} />
+        <h2 className="text-2xl font-semibold text-zinc-50 flex items-center">
+          <Filter className="mr-2" size={30} />
           Filters
         </h2>
         <button
           onClick={onReset}
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center"
+          className="text-md bg-zinc-100 brightness-90 cursor-pointer hover:bg-black hover:text-zinc-100 p-2 rounded-lg font-medium flex items-center"
         >
           <span>Reset All</span>
         </button>
@@ -31,13 +31,13 @@ export function Filters({
         <div>
           <label
             htmlFor="search"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-lg font-medium text-zinc-100 mb-1"
           >
             Company Name
           </label>
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-3 cursor-pointer top-1/2 transform -translate-y-1/2 text-zinc-500"
               size={16}
             />
             <input
@@ -46,7 +46,7 @@ export function Filters({
               value={searchTerm}
               onChange={(e) => onSearch(e.target.value)}
               placeholder="Search companies..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-500 bg-zinc-300 rounded-lg "
             />
           </div>
         </div>
@@ -55,7 +55,7 @@ export function Filters({
         <div>
           <label
             htmlFor="location"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-lg font-medium text-zinc-50 mb-1"
           >
             Location
           </label>
@@ -64,7 +64,7 @@ export function Filters({
               id="location"
               value={selectedLocation}
               onChange={(e) => onLocation(e.target.value)}
-              className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
+              className="w-full pl-3 pr-10 py-2 border cursor-pointer border-gray-500 bg-zinc-300 rounded-lg appearance-none"
             >
               <option value="">All Locations</option>
               {locations.map((location) => (
@@ -74,7 +74,7 @@ export function Filters({
               ))}
             </select>
             <ChevronDown
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-500"
               size={16}
             />
           </div>
@@ -84,7 +84,7 @@ export function Filters({
         <div>
           <label
             htmlFor="industry"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-lg font-medium text-zinc-50 mb-1"
           >
             Industry
           </label>
@@ -93,7 +93,7 @@ export function Filters({
               id="industry"
               value={selectedIndustry}
               onChange={(e) => onIndustry(e.target.value)}
-              className="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
+              className="w-full pl-3 pr-10 py-2 border cursor-pointer border-gray-500 bg-zinc-300 rounded-lg appearance-none"
             >
               <option value="">All Industries</option>
               {industries.map((industry) => (
@@ -103,7 +103,7 @@ export function Filters({
               ))}
             </select>
             <ChevronDown
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-zinc-500"
               size={16}
             />
           </div>

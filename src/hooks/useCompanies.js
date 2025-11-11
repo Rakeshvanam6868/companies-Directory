@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect } from "react";
 import { mockCompanies } from "../data/companies";
 
 export function useCompanies() {
-  const [view, setView] = useState("grid"); // 'grid' | 'list'
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("");
@@ -73,16 +72,7 @@ export function useCompanies() {
     return filteredCompanies.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredCompanies, currentPage, itemsPerPage]);
 
-  const handleSort = (key) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-    }));
-  };
-
   const setSort = (key, direction) => setSortConfig({ key, direction });
-
-
 
   const resetFilters = () => {
     setSearchTerm("");
@@ -106,7 +96,6 @@ export function useCompanies() {
 
   return {
     state: {
-      view,
       searchTerm,
       selectedLocation,
       selectedIndustry,
@@ -126,14 +115,12 @@ export function useCompanies() {
       range,
     },
     actions: {
-      setView,
       setSearchTerm,
       setSelectedLocation,
       setSelectedIndustry,
       setSortConfig,
       setCurrentPage,
       setItemsPerPage,
-      handleSort,
       resetFilters,
       nextPage,
       prevPage,

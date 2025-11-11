@@ -1,20 +1,21 @@
-import React from "react";
 import { useCompanies } from "./hooks/useCompanies";
 import { Header } from "./components/layout/Header";
 import { Filters } from "./components/filters/Filters";
 import { ResultsInfo } from "./components/list/ResultsInfo";
 import { EmptyState } from "./components/list/EmptyState";
 import { CompanyGrid } from "./components/list/CompanyGrid";
-import { CompanyTable } from "./components/list/CompanyTable";
 import { Pagination } from "./components/list/Pagination";
 import { Loader } from "./components/feedback/Loader";
 import { ErrorState } from "./components/feedback/ErrorState";
 import { Footer } from "./components/layout/Footer";
+import { useState, useEffect } from "react";
+import { useDebounce } from "./hooks/useDebounce";
+import SortBar from "./components/list/SortBar";
+import ActiveChips from "./components/filters/ActiveChips";
 
 export default function App() {
   const { state, data, actions } = useCompanies();
   const {
-    view,
     searchTerm,
     selectedLocation,
     selectedIndustry,
@@ -24,6 +25,8 @@ export default function App() {
     isLoading,
     error,
   } = state;
+  const [searchInput, setSearchInput] = useState(searchTerm);
+  const debounced = useDebounce(searchInput, 300);
 
   const {
     locations,
@@ -33,12 +36,10 @@ export default function App() {
     totalFiltered,
   } = data;
   const {
-    setView,
     setSearchTerm,
     setSelectedLocation,
     setSelectedIndustry,
     setItemsPerPage,
-    handleSort,
     resetFilters,
     nextPage,
     prevPage,
@@ -46,23 +47,30 @@ export default function App() {
     setCurrentPage,
   } = actions;
 
+  useEffect(() => {
+    setSearchTerm(debounced);
+    setCurrentPage(1);
+  }, [debounced, setSearchTerm, setCurrentPage]);
+
   if (isLoading) return <Loader />;
   if (error) return <ErrorState />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <Header totalCount={20} view={view} onChangeView={setView} />
+    <div className="min-h-screen bg-linear-to-br  from-[#234C6A] to-[#1B3C53] pt-5">
+      <Header totalCount={data.filteredCompanies.length} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
         <Filters
-          searchTerm={searchTerm}
+          searchTerm={searchInput}
           locations={locations}
           industries={industries}
           selectedLocation={selectedLocation}
           selectedIndustry={selectedIndustry}
           onSearch={(v) => {
-            setSearchTerm(v);
-            setCurrentPage(1);
+            // update the local input; App's effect will apply debounced value to the real searchTerm
+            setSearchInput(v);
+            // do not immediately change currentPage here; the effect below will set current page when debounced changes
           }}
           onLocation={(v) => {
             setSelectedLocation(v);
@@ -73,6 +81,31 @@ export default function App() {
             setCurrentPage(1);
           }}
           onReset={resetFilters}
+        />
+
+        <SortBar
+          sortKey={sortConfig.key}
+          direction={sortConfig.direction}
+          onKey={(k) => actions.setSort(k, sortConfig.direction)}
+          onDir={(d) => actions.setSort(sortConfig.key, d)}
+          total={totalFiltered}
+          range={data.range}
+        />
+
+        <ActiveChips
+          search={searchTerm}
+          location={selectedLocation}
+          industry={selectedIndustry}
+          onClear={(k) => {
+            if (k === "search") actions.setSearchTerm("");
+            if (k === "location") actions.setSelectedLocation("");
+            if (k === "industry") actions.setSelectedIndustry("");
+            actions.setCurrentPage(1);
+          }}
+          onClearAll={() => {
+            actions.resetFilters();
+            setSearchInput(""); // keep the input in sync with debounced search
+          }}
         />
 
         {totalFiltered === 0 ? (
@@ -90,15 +123,7 @@ export default function App() {
               }}
             />
 
-            {view === "grid" ? (
-              <CompanyGrid companies={paginatedCompanies} />
-            ) : (
-              <CompanyTable
-                companies={paginatedCompanies}
-                sortConfig={sortConfig}
-                onSort={handleSort}
-              />
-            )}
+            <CompanyGrid companies={paginatedCompanies} searchTerm={searchTerm} />
 
             <Pagination
               currentPage={currentPage}

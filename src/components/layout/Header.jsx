@@ -1,43 +1,22 @@
-import { Grid, List } from "lucide-react";
 
-export function Header({ totalCount, view, onChangeView }) {
+
+export function Header({ totalCount }) {
   return (
-    <header className="bg-white shadow-sm">
+    <header className="flex justify-center items-center bg-white/20 backdrop-blur-sm shadow-xl rounded-xl max-w-[80%] mx-auto  ">
+    
+    <div className="rounded-lg px-4 py-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-zinc-50">
               Companies Directory
             </h1>
-            <p className="mt-1 text-gray-600">
+            <p className="mt-1 text-zinc-100">
               Explore {totalCount} innovative companies worldwide
             </p>
           </div>
-          <div className="mt-4 md:mt-0 flex space-x-3">
-            <button
-              onClick={() => onChangeView("grid")}
-              className={`p-2 rounded-lg ${
-                view === "grid"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-500 hover:bg-gray-100"
-              }`}
-              aria-label="Grid view"
-            >
-              <Grid size={20} />
-            </button>
-            <button
-              onClick={() => onChangeView("list")}
-              className={`p-2 rounded-lg ${
-                view === "list"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-500 hover:bg-gray-100"
-              }`}
-              aria-label="List view"
-            >
-              <List size={20} />
-            </button>
-          </div>
         </div>
+      </div>
       </div>
     </header>
   );
